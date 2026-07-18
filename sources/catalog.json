@@ -1,0 +1,88 @@
+{
+  "projectBrain": [
+    "handbook/project-overview.md",
+    "handbook/source-of-truth.md",
+    "handbook/reading-paths.md",
+    "handbook/document-inventory.md",
+    "handbook/statistical-foundation.md",
+    "handbook/protocol-v21.md",
+    "handbook/security-and-threat-model.md",
+    "handbook/gridpool-vs-p2pool.md",
+    "handbook/project-architecture.md",
+    "handbook/networking-and-telemetry.md",
+    "handbook/mining-integrations.md",
+    "handbook/research-findings.md",
+    "handbook/experiment-ledger.md",
+    "handbook/roadmap-and-open-questions.md",
+    "handbook/faq.md",
+    "handbook/glossary.md",
+    "handbook/engineering-practices.md",
+    "decisions/README.md",
+    "decisions/0001-ranked-achieved-difficulty.md",
+    "decisions/0002-fixed-payout-and-reserve-size.md",
+    "decisions/0003-v2-snapshots-and-paid-lineage.md",
+    "decisions/0004-v21-merge-and-boundary-finality.md",
+    "decisions/0005-sovereign-slot-zero.md",
+    "decisions/0006-layered-peer-transports.md",
+    "decisions/0007-canonical-support-output.md",
+    "decisions/0008-sv2-pool-fork.md"
+  ],
+  "corpus": [
+    {
+      "title": "Draft GridPool Technical Whitepaper",
+      "repository": "gridpool-spec",
+      "revision": "61e31a8790008cc70a5e3066a6c5a5c8361e9ed8",
+      "path": "../gridpool-spec/gridpool-whitepaper-draft.md",
+      "canonicalUrl": "https://github.com/gridlabs-science/gridpool-spec/blob/61e31a8790008cc70a5e3066a6c5a5c8361e9ed8/gridpool-whitepaper-draft.md"
+    },
+    {
+      "title": "GridPool Plain-Language Whitepaper",
+      "repository": "gridpool-spec",
+      "revision": "61e31a8790008cc70a5e3066a6c5a5c8361e9ed8",
+      "path": "../gridpool-spec/gridpool-whitepaper-plain-language.md",
+      "canonicalUrl": "https://github.com/gridlabs-science/gridpool-spec/blob/61e31a8790008cc70a5e3066a6c5a5c8361e9ed8/gridpool-whitepaper-plain-language.md"
+    },
+    {
+      "title": "July 2026 V2.1 Research Update",
+      "repository": "gridpool-simulations",
+      "revision": "80066d5114db6707061f60e841ff2e7e9308ec83",
+      "path": "../gridpool-simulations/reports/july17/gridpool-july17-research-update-v1.md",
+      "canonicalUrl": "https://github.com/gridlabs-science/gridpool-simulations/blob/80066d5114db6707061f60e841ff2e7e9308ec83/reports/july17/gridpool-july17-research-update-v1.md"
+    },
+    {
+      "title": "V2.1 Consensus Research Note",
+      "repository": "gridpool-simulations",
+      "revision": "80066d5114db6707061f60e841ff2e7e9308ec83",
+      "path": "../gridpool-simulations/reports/july17/gridpool-v2.1-consensus-note.md",
+      "canonicalUrl": "https://github.com/gridlabs-science/gridpool-simulations/blob/80066d5114db6707061f60e841ff2e7e9308ec83/reports/july17/gridpool-v2.1-consensus-note.md"
+    },
+    {
+      "title": "Reference Consensus Selection Audit",
+      "repository": "boot-protocol",
+      "revision": "902d5e63522dc64b8e33dc74429a18aecc830ea5",
+      "path": "../boot-protocol/docs/consensus-selection-audit.md",
+      "canonicalUrl": "https://github.com/gridlabs-science/boot-protocol/blob/902d5e63522dc64b8e33dc74429a18aecc830ea5/docs/consensus-selection-audit.md"
+    },
+    {
+      "title": "Robust Networking Architecture Plan",
+      "repository": "boot-protocol",
+      "revision": "902d5e63522dc64b8e33dc74429a18aecc830ea5",
+      "path": "../boot-protocol/docs/robust-networking-architecture-plan.md",
+      "canonicalUrl": "https://github.com/gridlabs-science/boot-protocol/blob/902d5e63522dc64b8e33dc74429a18aecc830ea5/docs/robust-networking-architecture-plan.md"
+    },
+    {
+      "title": "Umbrel And Start9 Launch Checklist",
+      "repository": "boot-protocol",
+      "revision": "902d5e63522dc64b8e33dc74429a18aecc830ea5",
+      "path": "../boot-protocol/docs/umbrel-start9-launch-checklist.md",
+      "canonicalUrl": "https://github.com/gridlabs-science/boot-protocol/blob/902d5e63522dc64b8e33dc74429a18aecc830ea5/docs/umbrel-start9-launch-checklist.md"
+    },
+    {
+      "title": "Firmware Coinbase Compatibility Matrix",
+      "repository": "boot-protocol",
+      "revision": "902d5e63522dc64b8e33dc74429a18aecc830ea5",
+      "path": "../boot-protocol/docs/firmware-coinbase-compatibility-matrix.md",
+      "canonicalUrl": "https://github.com/gridlabs-science/boot-protocol/blob/902d5e63522dc64b8e33dc74429a18aecc830ea5/docs/firmware-coinbase-compatibility-matrix.md"
+    }
+  ]
+}
