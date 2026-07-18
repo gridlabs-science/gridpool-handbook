@@ -12,23 +12,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out handbook
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: gridpool-handbook
       - name: Check out protocol documents
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: gridlabs-science/gridpool-spec
           ref: 61e31a8790008cc70a5e3066a6c5a5c8361e9ed8
           path: gridpool-spec
       - name: Check out simulations
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: gridlabs-science/gridpool-simulations
           ref: 80066d5114db6707061f60e841ff2e7e9308ec83
           path: gridpool-simulations
       - name: Check out reference node
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: gridlabs-science/boot-protocol
           ref: 902d5e63522dc64b8e33dc74429a18aecc830ea5
