@@ -4,7 +4,7 @@ title: Mining Integrations And Compatibility
 status: current
 owner: Grid Labs
 applies_to: adapters
-last_verified: 2026-07-18
+last_verified: 2026-07-22
 ---
 
 # Mining Integrations And Compatibility
@@ -48,6 +48,19 @@ Hydrapool can provide a familiar endpoint for miners without DATUM. A hosted
 endpoint changes the trust and operational model: its operator constructs work
 and may charge a fee, while the GridPool coinbase still pays the active snapshot
 directly. Public endpoints must make slot-0 attribution and fees explicit.
+
+The early CKPool/AtlasPool path uses a small CKPool fork plus a Rust sidecar.
+GridPool supplies a versioned work plan and event stream; CKPool retains each
+issued job's exact coinbase; the adapter submits full proofs and batches ordinary
+vardiff telemetry. GridPool mode is opt-in per connection, and any operator fee
+is represented by actual deterministic slot-0 work buckets rather than trusted
+metadata.
+
+PublicPool is the next integration candidate, not a deployed adapter. Its
+current NestJS/TypeScript Stratum implementation should first be mapped against
+the same generic work-plan/proof contract. Ordinary solo mode and local Bitcoin
+block submission must remain intact; GridPool consensus must not acquire
+PublicPool-specific identity or accounting semantics.
 
 ## Direct Firmware
 

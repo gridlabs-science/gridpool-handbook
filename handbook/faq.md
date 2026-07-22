@@ -90,9 +90,12 @@ SV2 header-only mining, or future tested compatibility mechanisms are required.
 
 ## Is The Support Fee Mandatory?
 
-The beta supports a canonical optional support output. Nodes may disable it;
-they may not substitute an arbitrary custom address into that special role.
-The mechanism is under review and should not be described as permanent.
+On the public reference network, yes: one canonical Grid Labs support position
+(~1/300 of subsidy, about 0.33%) is part of the interoperable payout suffix
+(ADR-0007). Compatible nodes use that fixed address; they may not substitute an
+arbitrary operator fee address. Support-off is experimental/private only and is
+not mixed with reference-network peers. Long-term funding also includes grants
+and donations so the project is not dependent on rare block fees alone.
 
 ## Is GridPool Ready For Production?
 

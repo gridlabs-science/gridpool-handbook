@@ -4,7 +4,7 @@ title: Project And Repository Architecture
 status: current
 owner: Grid Labs
 applies_to: project
-last_verified: 2026-07-18
+last_verified: 2026-07-22
 ---
 
 # Project And Repository Architecture
@@ -37,6 +37,13 @@ reward-sharing network can accept work from different sovereign mining stacks.
 - `gridpool-sv2-adapter` records an earlier JDC/JDS sidecar experiment. It is
   useful history but is not the preferred architecture.
 - Hydrapool provides a Stratum V1/HTTP integration path and hosted endpoint.
+- `gridpool-ckpool` plus `gridpool-ckpool-adapter` provide an early public-beta
+  Stratum V1 gateway using the generic GridPool work-plan, SSE, full-proof, and
+  telemetry contract. Ordinary CKPool users remain on ordinary templates;
+  GridPool mode is explicit.
+- PublicPool is the next integration candidate because of its self-hosted
+  footprint. No integration is implemented yet; the first step is an upstream
+  architecture seam review, not PublicPool-specific consensus code.
 - `esp-miner` demonstrates direct firmware template construction and HTTP share
   submission without a traditional Stratum pool layer.
 
@@ -69,3 +76,9 @@ The reference repository still combines consensus, networking, DATUM server,
 UI, and operator tooling. That is acceptable for the beta but increases the
 blast radius of changes. The long-term modular boundary is a reusable consensus
 and peer engine with optional adapter packages, not a rewrite before packaging.
+
+The combined UI/API currently also mixes public network status with detailed
+operator diagnostics. Packaging requires an explicit disclosure boundary:
+public node identity, private/outbound-only identity, and local authenticated
+diagnostics must use distinct response policies rather than relying on the UI to
+hide raw fields.

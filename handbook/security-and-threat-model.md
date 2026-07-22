@@ -3,8 +3,8 @@ id: security-threat-model
 title: Security And Threat Model
 status: current
 owner: Grid Labs
-applies_to: protocol-v2.1
-last_verified: 2026-07-18
+applies_to: protocol-v2.1, protocol-v2.2
+last_verified: 2026-07-22
 ---
 
 # Security And Threat Model
@@ -29,8 +29,9 @@ does not make Bitcoin mining or peer-to-peer networking risk-free.
   reward component to a shared ledger. This is a mitigation, not a proof that
   withholding is impossible.
 - **Sharechain majority attacks:** there is no continuously extended
-  winner-take-all sharechain tip to reorganize. V2.1 also rejects retroactive
-  previous-parent snapshot rewrites.
+  winner-take-all sharechain tip to reorganize. V2.1 rejects retroactive
+  previous-parent direct ingress; V2.2 reconciles validated sibling boundary
+  reserves without subsequent-hashrate branch voting.
 
 ## Remaining Risks
 
@@ -48,14 +49,19 @@ does not make Bitcoin mining or peer-to-peer networking risk-free.
   rejects those shares, but miners can waste work before noticing.
 - Software supply chain, operator key compromise, Bitcoin node eclipse, DNS
   interference, and endpoint censorship remain operational threats.
+- Prototype-era diagnostics may expose private endpoints, miner identities, or
+  secret material if public and operator-only surfaces are not separated. The
+  package gate requires explicit redaction and authentication rather than UI-only
+  hiding.
 
 ## Majority Hashrate
 
 A miner with most instantaneous team hashrate can create a separate team,
-exclude others, or withhold work. V2.1 is intentionally not a “follow whatever
-the majority later claims was heavier” protocol. The attacker cannot use late
-stale proofs to rewrite another node's finalized boundary, but can still mine an
-incompatible snapshot and attract miners through external coordination.
+exclude others, or withhold work. GridPool is intentionally not a “follow
+whatever the majority later claims was heavier” protocol. V2.2 sibling
+reconciliation uses fully validated monotonic union rather than post-boundary
+hashrate, but an attacker can still mine an incompatible family/team and attract
+miners through external coordination.
 
 Therefore the defensible claim is narrower than “immune to 51% attacks”:
 GridPool removes the classic sharechain reorganization mechanism and makes

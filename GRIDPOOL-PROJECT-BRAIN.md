@@ -51,13 +51,13 @@ pay the currently active leaderboard directly in the Bitcoin coinbase.
 
 ### Current Maturity
 
-The reference implementation is public beta software. V2.1 is the intended
-current consensus model, but the protocol repository still labels its
+The reference implementation is public beta software. Public nodes currently
+run V2.2-capable binaries under a height-gated rollout: V2.1 remains active
+until Bitcoin height `959500`, when compatible nodes activate V2.2 Monotonic
+Snapshot Reconciliation together. The protocol repository still labels its
 whitepaper as a draft and does not yet contain a complete independent
-interoperability vector suite. The live network has provided valuable field
-telemetry and exposed real synchronization, DATUM, and deployment bugs; this is
-evidence of engineering progress, not proof that all adversarial cases are
-closed.
+interoperability vector suite. Live telemetry and regression tests are evidence
+of engineering progress, not proof that all adversarial cases are closed.
 
 ### Naming
 
@@ -142,7 +142,7 @@ credential manager or protected environment file, never in either repository.
 ### New Contributor
 
 1. `project-overview.md`
-2. `protocol-v21.md`
+2. `protocol-v22.md`, then `protocol-v21.md` for the retained foundation
 3. `project-architecture.md`
 4. `roadmap-and-open-questions.md`
 5. The target repository's `AGENTS.md` and README
@@ -150,10 +150,11 @@ credential manager or protected environment file, never in either repository.
 ### Protocol Reviewer
 
 1. `statistical-foundation.md`
-2. `protocol-v21.md`
+2. `protocol-v22.md` and `protocol-v21.md`
 3. `security-and-threat-model.md`
 4. `../decisions/README.md`
-5. The technical whitepaper and V2.1 research update in the full corpus
+5. The technical whitepaper, V2.2 reconciliation draft, and research update in
+   the full corpus
 
 ### P2Pool Researcher
 
@@ -165,7 +166,7 @@ credential manager or protected environment file, never in either repository.
 ### Node Or Adapter Developer
 
 1. `project-architecture.md`
-2. `protocol-v21.md`
+2. `protocol-v22.md` and `protocol-v21.md`
 3. `networking-and-telemetry.md`
 4. `mining-integrations.md`
 5. Repository-local instructions and tests
@@ -340,6 +341,82 @@ Claims about miner behavior, network convergence, pool hopping, withholding,
 or realized payout variance rely on simulations and field measurements linked
 from `research-findings.md`.
 
+<!-- source: handbook/protocol-v22.md -->
+
+## GridPool V2.2 Protocol Model
+
+This is the cross-project explanatory summary. The detailed reference design,
+state machine, implementation tests, and cutover notes remain required for a
+consensus implementation.
+
+V2.2 preserves V2.1's ranked unpaid Work Set, active payout snapshot, retained
+contexts, paid-once lineage, slot-0 attribution, and strict rejection of new
+previous-parent direct-ingress proofs after a locally observed boundary. Its
+major addition is deterministic recovery when honest nodes form different
+snapshots at the same Bitcoin-block boundary.
+
+### Deployment Status
+
+The public nodes run V2.2-capable software but remain on active V2.1 consensus
+and state schema 2 until Bitcoin height `959500`. At that height, upgraded nodes
+activate consensus version 22 and schema 3 together. Legacy V2.1 nodes then
+become visibly incompatible. A peer-relayed header cannot trigger activation;
+the attached Bitcoin node supplies the trusted activation height.
+
+### Snapshot Families
+
+Snapshots may reconcile only when they share the same protocol/network,
+predecessor snapshot, Bitcoin boundary hash and height, payout variant, and
+canonical support-output rules. These fields define a **snapshot family**.
+Different Bitcoin blocks, predecessors, networks, or payout rules are isolated
+and never unioned silently.
+
+### Monotonic Snapshot Reconciliation
+
+When a node fully validates two sibling boundary reserves in one family, it:
+
+1. unions their valid proof IDs;
+2. removes globally paid proof IDs;
+3. deduplicates by proof ID;
+4. ranks by achieved difficulty descending and proof ID ascending;
+5. retains the bounded reserve, 897 proofs by default; and
+6. deterministically rebuilds the active payout snapshot.
+
+Omitting a proof cannot remove work already known by a node. Adding a proof
+requires complete independently verifiable proof of work and payout context.
+Post-boundary hashrate, peer identity/count, first arrival, endpoint reputation,
+and claimed aggregate weight do not elect a sibling branch.
+
+The operation is designed to be commutative, idempotent, and independent of
+member arrival order. Family members and retained contexts are bounded to keep
+consumer-node resource use predictable.
+
+### Paid Once
+
+A locally validated GridPool block pays the snapshot proven by its actual
+coinbase. Exactly those proof IDs are marked paid and removed once, including
+when the block paid a recognized sibling context. Other valid unpaid proofs
+remain available for the next state.
+
+### What V2.2 Does Not Do
+
+- It does not trust peer timestamps to backdate ordinary stale shares.
+- It does not follow the branch with the most subsequent hashrate.
+- It does not use node identities or votes for consensus weight.
+- It does not activate snapshots or payment transitions from an unvalidated
+  peer header.
+- It does not yet complete all two-block reorganization and paid-confirmation
+  rollback policy.
+- It does not implement V3 multi-team or branch-market concepts.
+
+### Beta Validation Gate
+
+The first package-ready V2.2 milestone requires coordinated activation followed
+by seven stable days across independently operated nodes. The soak must show
+convergence without state wipes, deterministic reconciliation if a sibling
+split occurs, preserved paid-once lineage, bounded state, and explainable mining
+adapter rejection rates.
+
 <!-- source: handbook/protocol-v21.md -->
 
 ## GridPool V2.1 Protocol Model
@@ -366,9 +443,10 @@ consensus implementation.
 
 There are 300 conceptual subsidy slots. Slot 0 belongs to the block finder and
 receives its fixed slot, transaction fees, and integer remainder. The remaining
-outputs represent the active snapshot. With the canonical optional support fee
-enabled, one post-slot-0 position is the support output and up to 298 are shared
-proof positions. With it disabled, up to 299 are shared positions.
+outputs represent the active snapshot. On the public reference network the
+canonical Grid Labs support output occupies one post-slot-0 position and up to
+298 positions are shared proof payouts (ADR-0007, accepted 2026-07-19). Support-off
+is not an interoperable reference-network dialect.
 
 Payout attribution is derived from the actual slot-0 output in the coinbase.
 Username, source node, worker suffix, and submitted metadata cannot override it.
@@ -448,8 +526,9 @@ does not make Bitcoin mining or peer-to-peer networking risk-free.
   reward component to a shared ledger. This is a mitigation, not a proof that
   withholding is impossible.
 - **Sharechain majority attacks:** there is no continuously extended
-  winner-take-all sharechain tip to reorganize. V2.1 also rejects retroactive
-  previous-parent snapshot rewrites.
+  winner-take-all sharechain tip to reorganize. V2.1 rejects retroactive
+  previous-parent direct ingress; V2.2 reconciles validated sibling boundary
+  reserves without subsequent-hashrate branch voting.
 
 ### Remaining Risks
 
@@ -467,14 +546,19 @@ does not make Bitcoin mining or peer-to-peer networking risk-free.
   rejects those shares, but miners can waste work before noticing.
 - Software supply chain, operator key compromise, Bitcoin node eclipse, DNS
   interference, and endpoint censorship remain operational threats.
+- Prototype-era diagnostics may expose private endpoints, miner identities, or
+  secret material if public and operator-only surfaces are not separated. The
+  package gate requires explicit redaction and authentication rather than UI-only
+  hiding.
 
 ### Majority Hashrate
 
 A miner with most instantaneous team hashrate can create a separate team,
-exclude others, or withhold work. V2.1 is intentionally not a “follow whatever
-the majority later claims was heavier” protocol. The attacker cannot use late
-stale proofs to rewrite another node's finalized boundary, but can still mine an
-incompatible snapshot and attract miners through external coordination.
+exclude others, or withhold work. GridPool is intentionally not a “follow
+whatever the majority later claims was heavier” protocol. V2.2 sibling
+reconciliation uses fully validated monotonic union rather than post-boundary
+hashrate, but an attacker can still mine an incompatible family/team and attract
+miners through external coordination.
 
 Therefore the defensible claim is narrower than “immune to 51% attacks”:
 GridPool removes the classic sharechain reorganization mechanism and makes
@@ -610,6 +694,13 @@ reward-sharing network can accept work from different sovereign mining stacks.
 - `gridpool-sv2-adapter` records an earlier JDC/JDS sidecar experiment. It is
   useful history but is not the preferred architecture.
 - Hydrapool provides a Stratum V1/HTTP integration path and hosted endpoint.
+- `gridpool-ckpool` plus `gridpool-ckpool-adapter` provide an early public-beta
+  Stratum V1 gateway using the generic GridPool work-plan, SSE, full-proof, and
+  telemetry contract. Ordinary CKPool users remain on ordinary templates;
+  GridPool mode is explicit.
+- PublicPool is the next integration candidate because of its self-hosted
+  footprint. No integration is implemented yet; the first step is an upstream
+  architecture seam review, not PublicPool-specific consensus code.
 - `esp-miner` demonstrates direct firmware template construction and HTTP share
   submission without a traditional Stratum pool layer.
 
@@ -642,6 +733,12 @@ The reference repository still combines consensus, networking, DATUM server,
 UI, and operator tooling. That is acceptable for the beta but increases the
 blast radius of changes. The long-term modular boundary is a reusable consensus
 and peer engine with optional adapter packages, not a rewrite before packaging.
+
+The combined UI/API currently also mixes public network status with detailed
+operator diagnostics. Packaging requires an explicit disclosure boundary:
+public node identity, private/outbound-only identity, and local authenticated
+diagnostics must use distinct response policies rather than relying on the UI to
+hide raw fields.
 
 <!-- source: handbook/networking-and-telemetry.md -->
 
@@ -756,6 +853,19 @@ Hydrapool can provide a familiar endpoint for miners without DATUM. A hosted
 endpoint changes the trust and operational model: its operator constructs work
 and may charge a fee, while the GridPool coinbase still pays the active snapshot
 directly. Public endpoints must make slot-0 attribution and fees explicit.
+
+The early CKPool/AtlasPool path uses a small CKPool fork plus a Rust sidecar.
+GridPool supplies a versioned work plan and event stream; CKPool retains each
+issued job's exact coinbase; the adapter submits full proofs and batches ordinary
+vardiff telemetry. GridPool mode is opt-in per connection, and any operator fee
+is represented by actual deterministic slot-0 work buckets rather than trusted
+metadata.
+
+PublicPool is the next integration candidate, not a deployed adapter. Its
+current NestJS/TypeScript Stratum implementation should first be mapped against
+the same generic work-plan/proof contract. Ordinary solo mode and local Bitcoin
+block submission must remain intact; GridPool consensus must not acquire
+PublicPool-specific identity or accounting semantics.
 
 ### Direct Firmware
 
@@ -874,20 +984,44 @@ This page records project-level priorities.
 
 ### Near-Term Beta
 
-- Complete V2.1 direct-ingress and state-bundle regression coverage, then publish
-  deterministic protocol vectors.
+- Complete the height-gated V2.2 activation at Bitcoin height `959500`, then
+  begin a clean seven-day multi-node soak after all public nodes reconverge on
+  active consensus/schema 22/3.
+- Freeze consensus, payout, state, peer, and mining hot-path behavior during the
+  soak except for demonstrated safety or availability defects.
+- Publish V2.2 Monotonic Snapshot Reconciliation language and deterministic
+  vectors independently of the reference implementation.
 - Finish a coordinated protocol/version compatibility process suitable for
   public package users rather than ad hoc `main` pulls.
 - Complete multi-node soak monitoring, restart/recovery tests, backup/restore,
-  and actionable state-divergence diagnostics.
+  reconciliation telemetry, and actionable same-boundary divergence diagnostics.
+- Expand StratumRace from one effective vantage to Main plus at least one remote
+  site with an attached Bitcoin node and verified clock quality.
 - Build one-click Umbrel and Start9 packages with private UI defaults, payout
   address setup, nearby Bitcoin-node discovery, and clear degraded networking.
 - Expand the firmware/rental compatibility matrix using the forced full-coinbase
   test endpoint and community reports.
+- Complete a pre-package security/privacy review. Remove prototype-era secret
+  logging, classify unauthenticated API/UI fields, keep outbound-only endpoints
+  private, and make private UI/network exposure the package default.
 - Upstream or maintain the minimal DATUM forced-coinbase behavior and stabilize
   the SRI-derived SV2 integration.
 - Continue a presentation-correct UI pass: active snapshot positions are locked;
   unpaid Work Set positions are provisional and may be displaced.
+- Design the full UI refresh against captured V2.2 states during the soak, but
+  deploy it afterward so presentation work does not invalidate stability data.
+
+### Mining Gateway Integrations
+
+- Stabilize the existing CKPool/AtlasPool fork and sidecar through a bounded
+  canary before broad operator instructions.
+- Use the generic work-plan/SSE/proof/telemetry contract as the common adapter
+  boundary; adapter identity metadata never overrides coinbase slot-0.
+- Perform a PublicPool architecture spike next. Map its current NestJS/TypeScript
+  job construction, vardiff, per-user attribution, and local block submission
+  before choosing a narrow upstream interface, optional module, or sidecar.
+- Do not deploy PublicPool integration to the reference network during the V2.2
+  soak. Design and regtest work may proceed in parallel.
 
 ### Networking
 
@@ -898,18 +1032,38 @@ This page records project-level priorities.
 - Add transport encryption/privacy without coupling identity count to consensus.
 - Evaluate chain-tip header gossip as snapshot-awareness assistance only after
   reorg, validation, and spoofing behavior is explicit.
+- Separate peer-protocol identity from public presentation: an outbound-only
+  node may reveal a cryptographic node ID over its encrypted session without
+  publishing an observed IP, LAN address, socket endpoint, or miner identity.
+
+### Security And Privacy
+
+- Treat long-term Ed25519/X25519 identity keys as secrets. The reference node's
+  prototype-era startup logging of private keys is a confirmed defect being
+  removed before the soak; retained provider/container logs may require a
+  deliberate identity rotation after migration is tested.
+- Inventory unauthenticated UI/API, peer gossip, telemetry, incident captures,
+  and support bundles for endpoint and miner-identity disclosure.
+- Define public, private, and operator-only status DTOs rather than relying on
+  CSS or UI hiding to protect sensitive fields.
+- Review key-file permissions, reverse proxies, forwarded-header trust,
+  WebSocket/admin authentication, rate limits, container privileges, and log
+  retention before Umbrel/Start9 launch.
 
 ### Consensus Questions
 
-- Publish a complete normative V2.1 merge/quarantine specification and vectors.
-- Define clean recovery for accidental long-lived incompatible snapshots without
-  reintroducing retroactive stale-branch election.
+- Complete the normative V2.2 MSR specification and vectors. V2.2 addresses
+  honest sibling-boundary splits through validated monotonic union without
+  post-boundary hashrate or peer-count branch voting.
+- Validate V2.2 recovery on the public network without a manual state wipe or
+  whole-state heaviest-branch selection.
 - Model delayed snapshots by fixed time or Bitcoin-block depth and their reorg,
   payout-delay, and withholding tradeoffs.
 - Specify behavior for one- and two-block Bitcoin reorganizations and potential
   consensus-affecting chain splits such as BIP110 scenarios.
-- Revisit whether the optional support output is the cleanest sustainable
-  funding mechanism.
+- Reference-network funding uses a single canonical support slot (~0.33%);
+  dual fee-on/off dialects are deferred (ADR-0007 accepted 2026-07-19). Grant and
+  donation funding remain first-class.
 - Explore variable coinbase capability only if a mechanism preserves fixed-list
   incentives; no such mechanism is accepted today.
 
@@ -1009,9 +1163,12 @@ SV2 header-only mining, or future tested compatibility mechanisms are required.
 
 ### Is The Support Fee Mandatory?
 
-The beta supports a canonical optional support output. Nodes may disable it;
-they may not substitute an arbitrary custom address into that special role.
-The mechanism is under review and should not be described as permanent.
+On the public reference network, yes: one canonical Grid Labs support position
+(~1/300 of subsidy, about 0.33%) is part of the interoperable payout suffix
+(ADR-0007). Compatible nodes use that fixed address; they may not substitute an
+arbitrary operator fee address. Support-off is experimental/private only and is
+not mixed with reference-network peers. Long-term funding also includes grants
+and donations so the project is not dependent on rare block fees alone.
 
 ### Is GridPool Ready For Production?
 
@@ -1243,20 +1400,63 @@ payload telemetry separately.
 
 <!-- source: decisions/0007-canonical-support-output.md -->
 
-## ADR 0007: Canonical Optional Support Output
+## ADR 0007: Canonical Support Output (Reference Network Fee-On)
 
 ### Decision
 
-The beta permits one canonical Grid Labs support position within the fixed 300
-conceptual slots. Configuration may enable or disable it but cannot replace its
-address with an arbitrary operator address.
+The public reference GridPool network uses **support-on only**.
+
+Within the fixed 300 conceptual subsidy slots:
+
+- Slot 0 remains the block finder's sovereign payout.
+- Exactly one post-slot-0 position is the **canonical Grid Labs support output**.
+- Up to 298 positions are shared proof payouts ranked by achieved difficulty.
+
+The support address is canonical. Compatible implementations MUST use that
+address when constructing the reference-network payout suffix. They MUST NOT
+substitute an arbitrary operator fee address and still claim reference-network
+compatibility.
+
+Support-off construction (up to 299 shared proof positions, no support slot)
+is **not** an interoperable dialect of the public reference network. It may
+exist only as an experimental build, private deployment, or future coordinated
+migration — not as a mixed peer of fee-on mainnet nodes.
+
+### Rationale
+
+1. **CONS-003:** Fee-on and fee-off suffixes produce different snapshot
+   identities and different paid proof sets. Both can be locally valid
+   constructions, but mixed operation makes paid-lineage bookkeeping ambiguous.
+   A single public dialect removes that class of cross-variant consensus bugs
+   for launch.
+2. **Transparency:** One fixed ~1/300 subsidy slot (~0.33% before remainder
+   details) is simpler to explain than optional dialects or probabilistic
+   full-template skims.
+3. **Funding honesty:** The slot is optional upside for Grid Labs lab work, not
+   a substitute for grants, donations, or other non-consensus funding. Block
+   discovery remains rare at early hashrate; protocol design must not assume
+   salary-scale fee income.
+4. **Competition:** GridPool competes on non-custodial ranked-set payouts and
+   multi-node operation, not on racing pure 0% solo pools. A tiny canonical slot
+   is acceptable product cost for a single clean network.
 
 ### Consequences
 
-The default is roughly one three-hundredth of subsidy attribution, or 0.333%,
-before considering variant details. Fee-on and fee-off templates must both be
-valid and distinguishable. The mechanism complicates payout variants and is
-explicitly scheduled for design review.
+- Public packages, seeds, and docs default to and require support-on for the
+  reference network.
+- Paid lineage is single-variant (support-on). Cross-variant consensus is
+  explicitly deferred (CONS-003 resolution path).
+- A future move to support-off or dual-dialect operation requires a coordinated
+  height- or version-gated migration and a new ADR; it is not a silent config
+  flip among mixed peers.
+- Grant and donation funding remain first-class so the project is not dependent
+  on support-slot EV.
+
+### Prior status
+
+Earlier beta text allowed configuration to enable or disable the canonical slot
+while forbidding address substitution. That optional-on/off interoperability
+goal is superseded for the public reference network by this acceptance.
 
 <!-- source: decisions/0008-sv2-pool-fork.md -->
 

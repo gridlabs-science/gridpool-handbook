@@ -4,7 +4,7 @@ title: GridPool Project Overview
 status: current
 owner: Grid Labs
 applies_to: project
-last_verified: 2026-07-18
+last_verified: 2026-07-22
 ---
 
 # GridPool Project Overview
@@ -48,13 +48,13 @@ pay the currently active leaderboard directly in the Bitcoin coinbase.
 
 ## Current Maturity
 
-The reference implementation is public beta software. V2.1 is the intended
-current consensus model, but the protocol repository still labels its
+The reference implementation is public beta software. Public nodes currently
+run V2.2-capable binaries under a height-gated rollout: V2.1 remains active
+until Bitcoin height `959500`, when compatible nodes activate V2.2 Monotonic
+Snapshot Reconciliation together. The protocol repository still labels its
 whitepaper as a draft and does not yet contain a complete independent
-interoperability vector suite. The live network has provided valuable field
-telemetry and exposed real synchronization, DATUM, and deployment bugs; this is
-evidence of engineering progress, not proof that all adversarial cases are
-closed.
+interoperability vector suite. Live telemetry and regression tests are evidence
+of engineering progress, not proof that all adversarial cases are closed.
 
 ## Naming
 

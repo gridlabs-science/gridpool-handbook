@@ -8,7 +8,8 @@ custodial pool and not a finished consensus standard.
 
 1. `handbook/project-overview.md`
 2. `handbook/source-of-truth.md`
-3. `handbook/protocol-v21.md`
+3. `handbook/protocol-v22.md` and the V2.1 foundation in
+   `handbook/protocol-v21.md`
 4. `handbook/statistical-foundation.md`
 5. `handbook/security-and-threat-model.md`
 6. The scoped `AGENTS.md` in the repository being changed
@@ -26,10 +27,10 @@ Use `handbook/reading-paths.md` for role-specific paths.
   payouts as core design constraints.
 - Payout attribution comes from the actual slot-0 coinbase output, not usernames
   or sender metadata.
-- V2.1 merges independently valid current-parent proofs into a bounded unpaid
-  Work Set. It does not elect an entire reserve by trusting a peer's claimed
-  aggregate weight, and it does not retroactively rewrite a locally finalized
-  snapshot with late previous-parent proofs.
+- V2.2 preserves V2.1 direct-ingress boundary finality and adds deterministic
+  monotonic union for fully validated sibling reserves in one exact snapshot
+  family. It does not elect a branch from subsequent hashrate, peer count, or a
+  peer's claimed aggregate weight.
 - Do not introduce identity-counted voting. Identities are cheap and Sybil
   neutral only when they do not create payout or consensus weight.
 - Treat public network addresses, code, and research as public. Never place raw

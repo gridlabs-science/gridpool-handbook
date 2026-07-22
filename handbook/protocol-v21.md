@@ -31,9 +31,10 @@ consensus implementation.
 
 There are 300 conceptual subsidy slots. Slot 0 belongs to the block finder and
 receives its fixed slot, transaction fees, and integer remainder. The remaining
-outputs represent the active snapshot. With the canonical optional support fee
-enabled, one post-slot-0 position is the support output and up to 298 are shared
-proof positions. With it disabled, up to 299 are shared positions.
+outputs represent the active snapshot. On the public reference network the
+canonical Grid Labs support output occupies one post-slot-0 position and up to
+298 positions are shared proof payouts (ADR-0007, accepted 2026-07-19). Support-off
+is not an interoperable reference-network dialect.
 
 Payout attribution is derived from the actual slot-0 output in the coinbase.
 Username, source node, worker suffix, and submitted metadata cannot override it.
