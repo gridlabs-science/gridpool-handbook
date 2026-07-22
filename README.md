@@ -26,7 +26,7 @@ node scripts/check-handbook.mjs
 
 - This handbook: project-wide concepts, decisions, roadmap, history, and source
   navigation.
-- [`gridpool-spec`](https://github.com/keegreil/gridpool-spec): draft normative
+- [`gridpool-spec`](https://github.com/gridlabs-science/gridpool-spec): draft normative
   protocol documents and future interoperability vectors.
 - [`boot-protocol`](https://github.com/gridlabs-science/boot-protocol): reference
   node implementation, API, UI, networking, packaging, and operator runbooks.
