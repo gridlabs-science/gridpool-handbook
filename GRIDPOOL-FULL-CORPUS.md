@@ -1493,8 +1493,8 @@ is retained as historical evidence, not the default deployment.
 ## Corpus Source: Draft GridPool Technical Whitepaper
 
 - Repository: `gridpool-spec`
-- Pinned revision: `61e31a8790008cc70a5e3066a6c5a5c8361e9ed8`
-- Canonical source: https://github.com/gridlabs-science/gridpool-spec/blob/61e31a8790008cc70a5e3066a6c5a5c8361e9ed8/gridpool-whitepaper-draft.md
+- Pinned revision: `81ca92750d0317e3fc806bab9e0cad2895be054e`
+- Canonical source: https://github.com/gridlabs-science/gridpool-spec/blob/81ca92750d0317e3fc806bab9e0cad2895be054e/gridpool-whitepaper-draft.md
 
 ## Status
 
@@ -2329,8 +2329,8 @@ long-running public telemetry rather than by claims of solved consensus.
 ## Corpus Source: GridPool Plain-Language Whitepaper
 
 - Repository: `gridpool-spec`
-- Pinned revision: `61e31a8790008cc70a5e3066a6c5a5c8361e9ed8`
-- Canonical source: https://github.com/gridlabs-science/gridpool-spec/blob/61e31a8790008cc70a5e3066a6c5a5c8361e9ed8/gridpool-whitepaper-plain-language.md
+- Pinned revision: `81ca92750d0317e3fc806bab9e0cad2895be054e`
+- Canonical source: https://github.com/gridlabs-science/gridpool-spec/blob/81ca92750d0317e3fc806bab9e0cad2895be054e/gridpool-whitepaper-plain-language.md
 
 ## The One-Minute Explanation
 
@@ -2866,8 +2866,8 @@ for the technical argument, reference code, models, and generated reports.
 ## Corpus Source: July 2026 V2.1 Research Update
 
 - Repository: `gridpool-simulations`
-- Pinned revision: `80066d5114db6707061f60e841ff2e7e9308ec83`
-- Canonical source: https://github.com/gridlabs-science/gridpool-simulations/blob/80066d5114db6707061f60e841ff2e7e9308ec83/reports/july17/gridpool-july17-research-update-v1.md
+- Pinned revision: `4b9b921880c2bd540a7c9e07253c5fa9f60b18e3`
+- Canonical source: https://github.com/gridlabs-science/gridpool-simulations/blob/4b9b921880c2bd540a7c9e07253c5fa9f60b18e3/reports/july17/gridpool-july17-research-update-v1.md
 
 ## Executive Summary
 
@@ -3450,8 +3450,8 @@ node scripts/peer-relay-latency-report.mjs \
 ## Corpus Source: V2.1 Consensus Research Note
 
 - Repository: `gridpool-simulations`
-- Pinned revision: `80066d5114db6707061f60e841ff2e7e9308ec83`
-- Canonical source: https://github.com/gridlabs-science/gridpool-simulations/blob/80066d5114db6707061f60e841ff2e7e9308ec83/reports/july17/gridpool-v2.1-consensus-note.md
+- Pinned revision: `4b9b921880c2bd540a7c9e07253c5fa9f60b18e3`
+- Canonical source: https://github.com/gridlabs-science/gridpool-simulations/blob/4b9b921880c2bd540a7c9e07253c5fa9f60b18e3/reports/july17/gridpool-v2.1-consensus-note.md
 
 ## GridPool V2.1 Consensus Note
 
@@ -3596,8 +3596,8 @@ Before packaging V2.1 for broader Umbrel/Start9-style deployment, the runtime im
 ## Corpus Source: Reference Consensus Selection Audit
 
 - Repository: `boot-protocol`
-- Pinned revision: `902d5e63522dc64b8e33dc74429a18aecc830ea5`
-- Canonical source: https://github.com/gridlabs-science/boot-protocol/blob/902d5e63522dc64b8e33dc74429a18aecc830ea5/docs/consensus-selection-audit.md
+- Pinned revision: `8152c5e12f113a7bc449849aadb10f2a4228293e`
+- Canonical source: https://github.com/gridlabs-science/boot-protocol/blob/8152c5e12f113a7bc449849aadb10f2a4228293e/docs/consensus-selection-audit.md
 
 ## Consensus Selection Audit
 
@@ -3851,8 +3851,8 @@ Short-term V2 launch should freeze only after:
 ## Corpus Source: Robust Networking Architecture Plan
 
 - Repository: `boot-protocol`
-- Pinned revision: `902d5e63522dc64b8e33dc74429a18aecc830ea5`
-- Canonical source: https://github.com/gridlabs-science/boot-protocol/blob/902d5e63522dc64b8e33dc74429a18aecc830ea5/docs/robust-networking-architecture-plan.md
+- Pinned revision: `8152c5e12f113a7bc449849aadb10f2a4228293e`
+- Canonical source: https://github.com/gridlabs-science/boot-protocol/blob/8152c5e12f113a7bc449849aadb10f2a4228293e/docs/robust-networking-architecture-plan.md
 
 ## GridPool Robust Networking Architecture Plan
 
@@ -4154,8 +4154,8 @@ Do not block public beta on UDP hole punching. Treat it as the likely next censo
 ## Corpus Source: Umbrel And Start9 Launch Checklist
 
 - Repository: `boot-protocol`
-- Pinned revision: `902d5e63522dc64b8e33dc74429a18aecc830ea5`
-- Canonical source: https://github.com/gridlabs-science/boot-protocol/blob/902d5e63522dc64b8e33dc74429a18aecc830ea5/docs/umbrel-start9-launch-checklist.md
+- Pinned revision: `8152c5e12f113a7bc449849aadb10f2a4228293e`
+- Canonical source: https://github.com/gridlabs-science/boot-protocol/blob/8152c5e12f113a7bc449849aadb10f2a4228293e/docs/umbrel-start9-launch-checklist.md
 
 ## Umbrel And Start9 Launch Checklist
 
@@ -4648,8 +4648,8 @@ If any answer is no, keep the project in public beta and avoid one-click platfor
 ## Corpus Source: Firmware Coinbase Compatibility Matrix
 
 - Repository: `boot-protocol`
-- Pinned revision: `902d5e63522dc64b8e33dc74429a18aecc830ea5`
-- Canonical source: https://github.com/gridlabs-science/boot-protocol/blob/902d5e63522dc64b8e33dc74429a18aecc830ea5/docs/firmware-coinbase-compatibility-matrix.md
+- Pinned revision: `8152c5e12f113a7bc449849aadb10f2a4228293e`
+- Canonical source: https://github.com/gridlabs-science/boot-protocol/blob/8152c5e12f113a7bc449849aadb10f2a4228293e/docs/firmware-coinbase-compatibility-matrix.md
 
 ## Firmware Coinbase Compatibility Matrix
 

@@ -19,19 +19,19 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: gridlabs-science/gridpool-spec
-          ref: 61e31a8790008cc70a5e3066a6c5a5c8361e9ed8
+          ref: 81ca92750d0317e3fc806bab9e0cad2895be054e
           path: gridpool-spec
       - name: Check out simulations
         uses: actions/checkout@v5
         with:
           repository: gridlabs-science/gridpool-simulations
-          ref: 80066d5114db6707061f60e841ff2e7e9308ec83
+          ref: 4b9b921880c2bd540a7c9e07253c5fa9f60b18e3
           path: gridpool-simulations
       - name: Check out reference node
         uses: actions/checkout@v5
         with:
           repository: gridlabs-science/boot-protocol
-          ref: 902d5e63522dc64b8e33dc74429a18aecc830ea5
+          ref: 8152c5e12f113a7bc449849aadb10f2a4228293e
           path: boot-protocol
       - name: Validate handbook and generated context
         run: node scripts/check-handbook.mjs
