@@ -853,10 +853,24 @@ The earlier stock-JDC plus custom JDS/adapter approach was technically useful
 but carried Job Declaration overhead that is unnecessary when each sovereign
 miner runs its own GridPool node.
 
-The fork currently obtains templates through Bitcoin Core mining IPC. Appliance
-packaging must provide a supported template-provider path across Umbrel/StartOS
-service boundaries; it must not assume a host IPC socket is exposed or bundle a
-second Bitcoin node.
+The fork now supports three template-provider modes:
+
+- Bitcoin Core 30/31 mining IPC for the lowest-latency native deployment;
+- standard `getblocktemplate`/`submitblock` JSON-RPC for Bitcoin Knots, older
+  Core, Docker, Umbrel, and StartOS; and
+- an automatic mode that prefers a reachable IPC socket and otherwise uses
+  RPC.
+
+The RPC provider reserves GridPool coinbase weight by removing only the
+required transaction suffix, then recomputes the coinbase merkle path and
+BIP141 witness commitment. A live Core 31 mainnet smoke test produced SV2 work
+and followed a tip transition. Appliance wrappers use RPC rather than assuming
+that a host IPC socket crosses the package boundary.
+
+The canonical appliance architecture is therefore the GridPool reference node
+plus `gridpool-sv2-pool`. DATUM, Hydrapool, CKPool, and AtlasPool remain useful
+integration laboratories but are not dependencies of the initial supported
+miner path.
 
 ### Hosted Stratum V1
 
