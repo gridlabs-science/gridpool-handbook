@@ -691,9 +691,12 @@ reward-sharing network can accept work from different sovereign mining stacks.
   pending deterministic upstream coinbase selection.
 - `gridpool-sv2-pool` is the active and initially supported miner integration.
   Forking the pool role avoids unnecessary JDC/JDS overhead for the common
-  one-sovereign-node case and supports header-only SV2 mining. Appliance
-  integration still needs a portable template-provider path because local Core
-  IPC cannot be assumed across platform service boundaries.
+  one-sovereign-node case and supports header-only SV2 mining. It prefers
+  Bitcoin Core 31 IPC where available and provides standard JSON-RPC for Knots,
+  older Core, Docker, Umbrel, and StartOS boundaries.
+- `gridpool-umbrel` and `gridpool-startos` are thin appliance wrappers around
+  pinned `boot-protocol` and `gridpool-sv2-pool` images. They contain platform
+  manifests and lifecycle glue, not consensus logic.
 - `gridpool-sv2-adapter` records an earlier JDC/JDS sidecar experiment. It is
   useful history but is not the preferred architecture.
 - Hydrapool provides a Stratum V1/HTTP integration path and hosted endpoint.

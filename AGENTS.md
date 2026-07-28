@@ -58,6 +58,8 @@ open a correction. Do not infer consensus from UI labels or old planning notes.
 - `gridpool-web`: static public website and connection guidance.
 - `gridpool-sv2-pool`: SRI-derived SV2 pool integration. This is the active SV2
   direction; verify its current branch and upstream before changing it.
+- `gridpool-umbrel`: thin Umbrel wrapper for the reference node plus native SV2.
+- `gridpool-startos`: thin StartOS wrapper for the same pinned runtime pair.
 - `gridpool-sv2-adapter`: earlier JDC/JDS prototype and design artifacts. Treat
   it as historical unless a current ADR reactivates it.
 - `datum_gateway`: upstream DATUM fork/PR work; keep changes generic enough for
