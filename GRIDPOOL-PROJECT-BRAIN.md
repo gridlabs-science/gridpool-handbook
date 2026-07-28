@@ -684,13 +684,16 @@ reward-sharing network can accept work from different sovereign mining stacks.
 
 ### Mining Integrations
 
-- DATUM is currently the most mature sovereign adapter. A user's DATUM Gateway
-  gets templates from the user's Bitcoin node, serves miners over Stratum V1,
+- DATUM was the first mature sovereign adapter. A user's DATUM Gateway gets
+  templates from the user's Bitcoin node, serves miners over Stratum V1,
   submits valid Bitcoin blocks locally, and sends GridPool share proofs to the
-  connected node.
-- `gridpool-sv2-pool` is the active SRI-derived direction. Forking the pool role
-  avoids unnecessary JDC/JDS overhead for the common one-sovereign-node case
-  and supports header-only SV2 mining.
+  connected node. It is now experimental/deprecated for appliance onboarding
+  pending deterministic upstream coinbase selection.
+- `gridpool-sv2-pool` is the active and initially supported miner integration.
+  Forking the pool role avoids unnecessary JDC/JDS overhead for the common
+  one-sovereign-node case and supports header-only SV2 mining. Appliance
+  integration still needs a portable template-provider path because local Core
+  IPC cannot be assumed across platform service boundaries.
 - `gridpool-sv2-adapter` records an earlier JDC/JDS sidecar experiment. It is
   useful history but is not the preferred architecture.
 - Hydrapool provides a Stratum V1/HTTP integration path and hosted endpoint.
@@ -816,12 +819,14 @@ is impossible.
 
 ### DATUM
 
-DATUM is the primary deployed integration because sovereign-minded OCEAN miners
-already use it. GridPool's DATUM server must preserve coinbaser IDs, session
-behavior, full payout outputs, and share-response cadence expected by clients.
-The client builds templates from its Bitcoin node and submits a found block
-through local RPC; GridPool receives the reward-sharing proof but is not the
-only block-broadcast path.
+DATUM was GridPool's first deployed integration because sovereign-minded OCEAN
+miners already use it. It remains valuable experimental infrastructure, but it
+is deprecated for the initial appliance launch because stock DATUM cannot force
+the required coinbase class deterministically. GridPool's DATUM server must
+still preserve coinbaser IDs, session behavior, full payout outputs, and
+share-response cadence expected by clients. The client builds templates from
+its Bitcoin node and submits a found block through local RPC; GridPool receives
+the reward-sharing proof but is not the only block-broadcast path.
 
 DATUM fingerprinting can select smaller coinbase classes for legacy firmware.
 That is unsafe for a fixed 300-slot GridPool snapshot because truncation changes
@@ -833,8 +838,9 @@ operators must warn that some firmware can hard-lock.
 ### Stratum V2
 
 Header-only SV2 mining avoids sending the full coinbase to capable ASICs and
-therefore avoids the central firmware-size constraint. The current direction is
-a minimal fork of SRI's pool implementation that:
+therefore avoids the central firmware-size constraint. Native SV2 is the only
+promised miner transport for the initial appliance beta. The current direction
+is a minimal fork of SRI's pool implementation that:
 
 - fetches GridPool payout/snapshot data;
 - constructs slot 0 per channel or uses an operator fallback address;
@@ -846,6 +852,11 @@ a minimal fork of SRI's pool implementation that:
 The earlier stock-JDC plus custom JDS/adapter approach was technically useful
 but carried Job Declaration overhead that is unnecessary when each sovereign
 miner runs its own GridPool node.
+
+The fork currently obtains templates through Bitcoin Core mining IPC. Appliance
+packaging must provide a supported template-provider path across Umbrel/StartOS
+service boundaries; it must not assume a host IPC socket is exposed or bundle a
+second Bitcoin node.
 
 ### Hosted Stratum V1
 
@@ -881,7 +892,8 @@ truncated-prefix coinbase is rejected with a firmware-specific diagnostic.
 Compatibility claims must name hardware, firmware/version, gateway/version,
 coinbase mode, network, duration, and observed result. The public matrix is
 community maintained and should distinguish suspected compatibility from tested
-compatibility.
+compatibility. Untested SV1 firmware, DATUM setups, and rental services are not
+part of the initial support promise.
 
 <!-- source: handbook/research-findings.md -->
 
@@ -984,9 +996,10 @@ This page records project-level priorities.
 
 ### Near-Term Beta
 
-- Complete the height-gated V2.2 activation at Bitcoin height `959500`, then
-  begin a clean seven-day multi-node soak after all public nodes reconverge on
-  active consensus/schema 22/3.
+- V2.2 activated at Bitcoin height `959500`. Pin Main and Oregon to one
+  provenanced release, pass a 24-hour canary, then run a clean seven-day
+  protocol soak. Other operator nodes contribute evidence when available but
+  do not control the clock.
 - Freeze consensus, payout, state, peer, and mining hot-path behavior during the
   soak except for demonstrated safety or availability defects.
 - Publish V2.2 Monotonic Snapshot Reconciliation language and deterministic
@@ -997,15 +1010,18 @@ This page records project-level priorities.
   reconciliation telemetry, and actionable same-boundary divergence diagnostics.
 - Expand StratumRace from one effective vantage to Main plus at least one remote
   site with an attached Bitcoin node and verified clock quality.
-- Build one-click Umbrel and Start9 packages with private UI defaults, payout
-  address setup, nearby Bitcoin-node discovery, and clear degraded networking.
-- Expand the firmware/rental compatibility matrix using the forced full-coinbase
-  test endpoint and community reports.
+- Build Umbrel and StartOS sideload packages now and run them concurrently with
+  the protocol soak. Keep package-canary resets distinct from shared-runtime
+  soak resets.
+- Make native SV2 the only promised initial miner transport. Continue the
+  firmware/rental matrix as community research; SV1 and rental paths remain
+  unsupported unless an exact version is tested.
 - Complete a pre-package security/privacy review. Remove prototype-era secret
   logging, classify unauthenticated API/UI fields, keep outbound-only endpoints
   private, and make private UI/network exposure the package default.
-- Upstream or maintain the minimal DATUM forced-coinbase behavior and stabilize
-  the SRI-derived SV2 integration.
+- Deprecate DATUM in initial appliance onboarding until deterministic forced
+  coinbase selection is available upstream. Retain it as experimental tooling
+  while stabilizing and packaging the SRI-derived native SV2 integration.
 - Continue a presentation-correct UI pass: active snapshot positions are locked;
   unpaid Work Set positions are provisional and may be displaced.
 - Design the full UI refresh against captured V2.2 states during the soak, but

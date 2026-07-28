@@ -4,7 +4,7 @@ title: Roadmap And Open Questions
 status: current
 owner: Grid Labs
 applies_to: public-beta
-last_verified: 2026-07-22
+last_verified: 2026-07-27
 ---
 
 # Roadmap And Open Questions
@@ -14,9 +14,10 @@ This page records project-level priorities.
 
 ## Near-Term Beta
 
-- Complete the height-gated V2.2 activation at Bitcoin height `959500`, then
-  begin a clean seven-day multi-node soak after all public nodes reconverge on
-  active consensus/schema 22/3.
+- V2.2 activated at Bitcoin height `959500`. Pin Main and Oregon to one
+  provenanced release, pass a 24-hour canary, then run a clean seven-day
+  protocol soak. Other operator nodes contribute evidence when available but
+  do not control the clock.
 - Freeze consensus, payout, state, peer, and mining hot-path behavior during the
   soak except for demonstrated safety or availability defects.
 - Publish V2.2 Monotonic Snapshot Reconciliation language and deterministic
@@ -27,15 +28,18 @@ This page records project-level priorities.
   reconciliation telemetry, and actionable same-boundary divergence diagnostics.
 - Expand StratumRace from one effective vantage to Main plus at least one remote
   site with an attached Bitcoin node and verified clock quality.
-- Build one-click Umbrel and Start9 packages with private UI defaults, payout
-  address setup, nearby Bitcoin-node discovery, and clear degraded networking.
-- Expand the firmware/rental compatibility matrix using the forced full-coinbase
-  test endpoint and community reports.
+- Build Umbrel and StartOS sideload packages now and run them concurrently with
+  the protocol soak. Keep package-canary resets distinct from shared-runtime
+  soak resets.
+- Make native SV2 the only promised initial miner transport. Continue the
+  firmware/rental matrix as community research; SV1 and rental paths remain
+  unsupported unless an exact version is tested.
 - Complete a pre-package security/privacy review. Remove prototype-era secret
   logging, classify unauthenticated API/UI fields, keep outbound-only endpoints
   private, and make private UI/network exposure the package default.
-- Upstream or maintain the minimal DATUM forced-coinbase behavior and stabilize
-  the SRI-derived SV2 integration.
+- Deprecate DATUM in initial appliance onboarding until deterministic forced
+  coinbase selection is available upstream. Retain it as experimental tooling
+  while stabilizing and packaging the SRI-derived native SV2 integration.
 - Continue a presentation-correct UI pass: active snapshot positions are locked;
   unpaid Work Set positions are provisional and may be displaced.
 - Design the full UI refresh against captured V2.2 states during the soak, but

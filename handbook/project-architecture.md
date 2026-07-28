@@ -4,7 +4,7 @@ title: Project And Repository Architecture
 status: current
 owner: Grid Labs
 applies_to: project
-last_verified: 2026-07-22
+last_verified: 2026-07-27
 ---
 
 # Project And Repository Architecture
@@ -27,13 +27,16 @@ reward-sharing network can accept work from different sovereign mining stacks.
 
 ## Mining Integrations
 
-- DATUM is currently the most mature sovereign adapter. A user's DATUM Gateway
-  gets templates from the user's Bitcoin node, serves miners over Stratum V1,
+- DATUM was the first mature sovereign adapter. A user's DATUM Gateway gets
+  templates from the user's Bitcoin node, serves miners over Stratum V1,
   submits valid Bitcoin blocks locally, and sends GridPool share proofs to the
-  connected node.
-- `gridpool-sv2-pool` is the active SRI-derived direction. Forking the pool role
-  avoids unnecessary JDC/JDS overhead for the common one-sovereign-node case
-  and supports header-only SV2 mining.
+  connected node. It is now experimental/deprecated for appliance onboarding
+  pending deterministic upstream coinbase selection.
+- `gridpool-sv2-pool` is the active and initially supported miner integration.
+  Forking the pool role avoids unnecessary JDC/JDS overhead for the common
+  one-sovereign-node case and supports header-only SV2 mining. Appliance
+  integration still needs a portable template-provider path because local Core
+  IPC cannot be assumed across platform service boundaries.
 - `gridpool-sv2-adapter` records an earlier JDC/JDS sidecar experiment. It is
   useful history but is not the preferred architecture.
 - Hydrapool provides a Stratum V1/HTTP integration path and hosted endpoint.
